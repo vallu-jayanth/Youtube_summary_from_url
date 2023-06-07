@@ -36,11 +36,10 @@ def get_text(url):
 
 def get_summary(url):
     text = get_text(url)
-    text = text[300:2600]
-    prompt = f"""Your task is to help an article writer to write articles\
-    based on given text. Identify the following from the text:\
-    1. Topics discussed
-    2. summary of each topic under their topic header\
+    prompt = f"""Your task is to summarize the given text\
+    Based on given text, Identify the following:\
+    - Topics discussed -each topic should be comma seperated 
+    - summary of the whole text\
     the text is delimitited with backticks.\
     format your response as article where you can select each topic\
     to view the summary\
@@ -49,20 +48,14 @@ def get_summary(url):
     return get_completion(prompt)
 if __name__=='__main__':
     with gr.Blocks() as demo:
-        gr.Markdown("<h1><center>Free Fast YouTube URL Video-to-Text using <a href=https://openai.com/blog/whisper/ target=_blank>OpenAI's Whisper</a> Model</center></h1>")
+        gr.Markdown("<h1><center>Free Fast YouTube URL Video-to-Text-Summary using OpenAI's Whisper and GPT Models</center></h1>")
         gr.Markdown("<center>Enter the link of any YouTube video to generate a text transcript of the video and then create a summary of the video transcript using openai API by prompting GPT model.</center>")
-        #gr.Markdown("<center>Enter the link of any YouTube video to generate a text transcript of the video.</center>")
         gr.Markdown("<center><b>'Whisper is a neural net that approaches human level robustness and accuracy on English speech recognition.'</b></center>")
-        gr.Markdown("<center>Transcription takes 5-10 seconds per minute of the video (bad audio/hard accents slow it down a bit). #patience</center>")
+        gr.Markdown("<center>Transcription and summarization takes 25-30 seconds per minute of the video (bad audio/hard accents slow it down a bit). #patience</center>")
         
         input_text_url = gr.Textbox(placeholder='Youtube video URL', label='YouTube URL')
         result_button_transcribe = gr.Button('Transcribe and summarize')
-        output_text_transcribe = gr.Textbox(placeholder='Transcript of the YouTube video.', label='Transcript')
-        
-        #result_button_summary = gr.Button('2. Create Summary')
-        #output_text_summary = gr.Textbox(placeholder='Summary of the YouTube video transcript.', label='Summary')
-        
+        output_text_transcribe = gr.Textbox(placeholder='Summary of the YouTube video.', label='Transcript')      
         result_button_transcribe.click(get_summary, inputs = input_text_url, outputs = output_text_transcribe)
-        #result_button_summary.click(get_summary, inputs = output_text_transcribe, outputs = output_text_summary)
 
     demo.queue(default_enabled = True).launch(debug = True)
